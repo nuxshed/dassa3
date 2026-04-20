@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>IMS — Wireframes</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; background: #f0eee9; }
+  * { box-sizing: border-box; }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="wireframes.jsx"></script>
+<script type="text/babel">
+const TWEAKS = /*EDITMODE-BEGIN*/{
+  "showAnnotations": false,
+  "showStudentFlow": true,
+  "showAdminFlow": true
+}/*EDITMODE-END*/;
+
+function App() {
+  const [tweaks, setTweaks] = React.useState(TWEAKS);
+  const [editMode, setEditMode] = React.useState(false);
+
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      const d = e.data || {};
+      if (d.type === '__activate_edit_mode') setEditMode(true);
+      if (d.type === '__deactivate_edit_mode') setEditMode(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  const setKey = (k, v) => {
+    const next = { ...tweaks, [k]: v };
+    setTweaks(next);
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { [k]: v } }, '*');
+  };
+
+  return (
+    <>
+      <DesignCanvas>
+        {/* Header block */}
+        <div style={{ padding: '10px 60px 40px', maxWidth: 900 }}>
+          <div style={{ fontSize: 12, letterSpacing: 2, color: '#888', marginBottom: 8 }}>IMS · DASS A3 · LOW-FI WIREFRAMES · v1</div>
+          <div style={{ fontSize: 34, fontWeight: 700, color: '#111', letterSpacing: -1, marginBottom: 10 }}>
+            Institute Management System
+          </div>
+          <div style={{ fontSize: 14, color: '#555', lineHeight: 1.6, maxWidth: 700 }}>
+            Monospace, document-like, no decoration. 10 screens across Dashboard, Timetable,
+            and Student Details — both admin &amp; student roles. Inspirations: Notion (layout /
+            property rows), Google Calendar (grid), Raycast (command palette).
+          </div>
+          <div style={{ display: 'flex', gap: 20, marginTop: 22, fontSize: 11, color: '#666' }}>
+            <span>▸ 390×844 baseline (scaled)</span>
+            <span>▸ greyscale · 1px borders</span>
+            <span>▸ placeholders over polish</span>
+          </div>
+        </div>
+
+        {/* FLOW 1 — Admin: Dashboard → Search → Students */}
+        {tweaks.showAdminFlow && (
+          <DCSection title="Flow A · Admin — Home, Search, Students" subtitle="D-01-A → D-02 → S-01 → S-01b → S-02">
+            <AdminDash />
+            <FlowArrow />
+            <SearchOverlay />
+            <FlowArrow />
+            <StudentList />
+            <FlowArrow />
+            <FilterSheet />
+            <FlowArrow />
+            <StudentProfile />
+          </DCSection>
+        )}
+
+        {/* FLOW 2 — Admin: Timetable authoring */}
+        {tweaks.showAdminFlow && (
+          <DCSection title="Flow B · Admin — Timetable authoring" subtitle="T-01 → T-02 → T-03  ·  drag-and-drop slot tray, limit alerts, create/edit">
+            <TimetableGrid />
+            <FlowArrow />
+            <SlotDetail />
+            <FlowArrow />
+            <SlotEdit />
+            <div style={{ width: 40 }} />
+            <ModuleStub />
+          </DCSection>
+        )}
+
+        {/* FLOW 3 — Student: Home */}
+        {tweaks.showStudentFlow && (
+          <DCSection title="Flow C · Student — Home" subtitle="D-01-S  ·  contextual layout (no module grid). Profile re-uses S-02 read-only.">
+            <StudentDash />
+          </DCSection>
+        )}
+
+        {/* Annotations */}
+        {tweaks.showAnnotations && (
+          <>
+            <DCPostIt top={260} left={740} rotate={-3} width={190}>
+              Raycast-style palette · grouped results · keyboard hints at bottom.
+            </DCPostIt>
+            <DCPostIt top={260} left={1390} rotate={2} width={200}>
+              Active filter chips stay visible (Recognition &gt; Recall).
+            </DCPostIt>
+            <DCPostIt top={1100} left={440} rotate={-1.5} width={200}>
+              Red left-border cell = subject/workload limit exceeded. Immediate status.
+            </DCPostIt>
+            <DCPostIt top={1100} left={1080} rotate={3} width={190}>
+              Bottom sheet = no context loss. Grid still visible behind scrim.
+            </DCPostIt>
+          </>
+        )}
+
+        <div style={{ padding: '20px 60px 60px', maxWidth: 900, color: '#888', fontSize: 11, lineHeight: 1.7 }}>
+          <div style={{ marginBottom: 8, letterSpacing: 2 }}>USABILITY PRINCIPLES APPLIED</div>
+          <div>▸ visibility of system status — limit alerts, filter chips, drag ghosts</div>
+          <div>▸ recognition over recall — all modules visible, search groups results by type</div>
+          <div>▸ aesthetic / minimalist — rows show only essentials, detail one tap away</div>
+        </div>
+      </DesignCanvas>
+
+      {editMode && (
+        <div style={{
+          position: 'fixed', bottom: 16, right: 16, zIndex: 100,
+          background: '#fff', border: '1px solid #111', borderRadius: 6,
+          padding: 14, fontFamily: 'JetBrains Mono, monospace', fontSize: 11,
+          boxShadow: '2px 2px 0 #111', width: 220,
+        }}>
+          <div style={{ fontWeight: 700, marginBottom: 10, letterSpacing: 1 }}>TWEAKS</div>
+          {[
+            ['showAnnotations', 'post-it notes'],
+            ['showAdminFlow', 'admin flows'],
+            ['showStudentFlow', 'student flow'],
+          ].map(([k, lbl]) => (
+            <label key={k} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '4px 0', cursor: 'pointer' }}>
+              <input type="checkbox" checked={!!tweaks[k]} onChange={e => setKey(k, e.target.checked)} />
+              <span>{lbl}</span>
+            </label>
+          ))}
+        </div>
+      )}
+    </>
+  );
+}
+
+function FlowArrow() {
+  return (
+    <div style={{ alignSelf: 'center', fontFamily: 'JetBrains Mono, monospace', fontSize: 20, color: '#999', padding: '0 4px' }}>→</div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
