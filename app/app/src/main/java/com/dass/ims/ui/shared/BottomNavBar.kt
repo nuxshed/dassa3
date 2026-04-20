@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
@@ -35,13 +36,13 @@ fun BottomNavBar(
     modifier: Modifier = Modifier,
 ) {
     val colors = ImsTheme.colors
-    Column(modifier = modifier.fillMaxWidth()) {
+    Column(modifier = modifier.fillMaxWidth().navigationBarsPadding()) {
         Divider(color = colors.border, thickness = 1.dp)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp)
-                .padding(top = 8.dp, bottom = 24.dp),
+                .padding(top = 8.dp, bottom = 8.dp),
         ) {
             NavTab.entries.forEach { tab ->
                 val on = tab == active

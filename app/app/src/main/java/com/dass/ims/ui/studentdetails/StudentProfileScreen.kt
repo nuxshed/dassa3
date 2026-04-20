@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -76,7 +77,8 @@ fun StudentProfileScreen(navController: NavController, studentid: Long) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(colors.bg),
+            .background(colors.bg)
+            .statusBarsPadding(),
     ) {
         TopBar(
             leftslot = {
@@ -122,7 +124,7 @@ fun StudentProfileScreen(navController: NavController, studentid: Long) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp, top = 8.dp, bottom = 16.dp),
+                        .padding(start = 20.dp, top = 8.dp, end = 20.dp, bottom = 16.dp),
                     verticalAlignment = Alignment.Top,
                     horizontalArrangement = Arrangement.spacedBy(14.dp),
                 ) {
@@ -178,7 +180,7 @@ fun StudentProfileScreen(navController: NavController, studentid: Long) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 20.dp, bottom = 10.dp),
+                            .padding(start = 20.dp, end = 20.dp, bottom = 10.dp),
                         horizontalArrangement = Arrangement.spacedBy(6.dp),
                     ) {
                         ActionButton(

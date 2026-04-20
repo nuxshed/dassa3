@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -76,7 +77,7 @@ fun TimetableScreen(navController: NavController) {
     val sheetstate = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
 
-    Column(modifier = Modifier.fillMaxSize().background(colors.bg)) {
+    Column(modifier = Modifier.fillMaxSize().background(colors.bg).statusBarsPadding()) {
         timetableheader(
             timetable = state.timetable?.name ?: "No timetable",
             gridview = gridview,

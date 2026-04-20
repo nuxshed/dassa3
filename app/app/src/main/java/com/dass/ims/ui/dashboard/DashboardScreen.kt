@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -89,7 +90,7 @@ private fun AdminDashboard(
     val initials = avatarinitials(state.user?.name ?: "A")
     val avatarcolor = avatarcolors[(userid % avatarcolors.size).toInt()]
 
-    Column(modifier = Modifier.fillMaxSize().background(colors.bg)) {
+    Column(modifier = Modifier.fillMaxSize().background(colors.bg).statusBarsPadding()) {
         // Header
         Row(
             modifier = Modifier
@@ -211,7 +212,7 @@ private fun StudentDashboard(
     val studentid = state.student?.studentid ?: 0L
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize().background(colors.bg),
+        modifier = Modifier.fillMaxSize().background(colors.bg).statusBarsPadding(),
     ) {
         // Header
         item {
